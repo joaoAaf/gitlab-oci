@@ -31,9 +31,6 @@ runcmd:
   - curl -fsSL https://get.docker.com | sh
   - curl -fsSL https://tailscale.com/install.sh | sh
   - tailscale up --authkey ${tailscale_key}
-  - export GITLAB_HOSTNAME=${gitlab_hostname}
-  - export GITLAB_PORTA_SSH=${gitlab_porta_ssh}
-  - export GITLAB_HOME=${gitlab_home}
   - mkdir -p ${gitlab_home}/config ${gitlab_home}/logs ${gitlab_home}/data ${gitlab_home}/runner/config
   - chown -R gitlab:gitlab ${gitlab_home}
   - docker compose -f /home/gitlab/docker-compose.yml up -d

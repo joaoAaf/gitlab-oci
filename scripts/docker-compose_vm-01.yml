@@ -10,27 +10,27 @@ services:
     restart: unless-stopped
     networks:
       - gitlab-net
-    hostname: ${GITLAB_HOSTNAME}
+    hostname: ${gitlab_hostname}
     environment:
       GITLAB_OMNIBUS_CONFIG: |
         # Configuração do URL externo do GitLab
-        external_url 'http://${GITLAB_HOSTNAME}'
+        external_url 'http://${gitlab_hostname}'
         
         # Configuração da porta SSH customizada
-        gitlab_rails['gitlab_shell_ssh_port'] = ${GITLAB_PORTA_SSH}
+        gitlab_rails['gitlab_shell_ssh_port'] = ${gitlab_porta_ssh}
         
         # Configuração do Container Registry
-        registry_external_url 'http://${GITLAB_HOSTNAME}:5050'
+        registry_external_url 'http://${gitlab_hostname}:5050'
         gitlab_rails['registry_enabled'] = true
     ports:
       - 80:80
       - 443:443
-      - ${GITLAB_PORTA_SSH}:22
+      - ${gitlab_porta_ssh}:22
       - 5050:5050
     volumes:
-      - ${GITLAB_HOME}/config:/etc/gitlab
-      - ${GITLAB_HOME}/logs:/var/log/gitlab
-      - ${GITLAB_HOME}/data:/var/opt/gitlab
+      - ${gitlab_home}/config:/etc/gitlab
+      - ${gitlab_home}/logs:/var/log/gitlab
+      - ${gitlab_home}/data:/var/opt/gitlab
     shm_size: '256m'
 
   gitlab-runner:
@@ -43,4 +43,4 @@ services:
       - gitlab
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${GITLAB_HOME}/runner/config:/etc/gitlab-runner
+      - ${gitlab_home}/runner/config:/etc/gitlab-runner

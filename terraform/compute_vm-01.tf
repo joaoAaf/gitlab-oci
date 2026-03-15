@@ -6,11 +6,13 @@ data "template_file" "cloud-init_vm-01" {
     tailscale_key = var.tailscale_key
     ssh_pub_key1  = var.ssh_pub_key1
     ssh_pub_key2  = var.ssh_pub_key2
-    timezone = var.timezone
-    gitlab_hostname = var.gitlab_hostname
-    gitlab_porta_ssh = var.gitlab_porta_ssh
-    gitlab_home = var.gitlab_home
-    docker_compose_content = base64encode(file("../scripts/docker-compose_vm-01.yml"))
+    timezone      = var.timezone
+    gitlab_home   = var.gitlab_home
+    docker_compose_content = base64encode(templatefile("../scripts/docker-compose_vm-01.yml", {
+      gitlab_hostname  = var.gitlab_hostname,
+      gitlab_porta_ssh = var.gitlab_porta_ssh,
+      gitlab_home      = var.gitlab_home
+    }))
   }
 }
 
