@@ -3,13 +3,13 @@ data "template_file" "cloud-init_vm-01" {
   template = file("../scripts/cloud-init_vm-01.yaml")
   # Variáveis a serem substituídas no template
   vars = {
-    tailscale_key = var.tailscale_key2
+    tailscale_key = var.tailscale_key
     ssh_pub_key1  = var.ssh_pub_key1
     ssh_pub_key2  = var.ssh_pub_key2
     timezone = var.timezone
-    webdav_username = var.webdav_username
-    webdav_password = var.webdav_password
-    pg_pass = var.pg_pass
+    gitlab_hostname = var.gitlab_hostname
+    gitlab_porta_ssh = var.gitlab_porta_ssh
+    gitlab_home = var.gitlab_home
     docker_compose_content = base64encode(file("../scripts/docker-compose_vm-01.yml"))
   }
 }
@@ -31,7 +31,7 @@ resource "oci_core_instance" "vm-01" {
   source_details {
     source_id               = "ocid1.image.oc1.sa-saopaulo-1.aaaaaaaaeor33zqzryd3smqgyg2arr4whsuobbtlwzxazovoto5vjnckaacq" # Define o ID da imagem a ser utilizada para criar a instância
     source_type             = "image"                                                                                      # Define o tipo de fonte como imagem
-    boot_volume_size_in_gbs = 130                                                                                          # Define o tamanho do disco rígido da instância em GBs
+    boot_volume_size_in_gbs = 100                                                                                          # Define o tamanho do disco rígido da instância em GBs
   }
 
   # Dados opcionais para personalização da instância

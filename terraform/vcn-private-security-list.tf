@@ -16,28 +16,4 @@ resource "oci_core_security_list" "private-security-list" {
     destination_type = "CIDR_BLOCK" # Tipo de destino, CIDR_BLOCK é a faixa IP autorizada para saída
     protocol         = "all"        # Permite tráfego de todos os protocolos
   }
-  # Regras para o tráfego de entrada
-  ingress_security_rules {
-    stateless   = false
-    source      = "10.0.2.0/24"
-    source_type = "CIDR_BLOCK"
-    protocol    = "1"
-    icmp_options {
-      type = 8 # echo message
-      code = 0
-    }
-  }
-  ingress_security_rules {
-    stateless   = false
-    source      = "10.0.2.0/24" # Define a faixa IP autorizada para ingressar
-    source_type = "CIDR_BLOCK"
-    # TCP protocol 6: https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml
-    protocol = "6" # Apenas tráfego TCP
-    # Define as opções do TCP
-    tcp_options {
-      # Define o intervalo de portas TCP permitidas
-      min = 5432 # Porta Posgresql
-      max = 5432
-    }
-  }
 }

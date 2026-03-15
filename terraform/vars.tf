@@ -5,11 +5,7 @@ variable "tenancy_ocid" {
 variable "region" {
   description = "Região onde será criado os recursos"
 }
-variable "tailscale_key1" {
-  description = "Auth key do Tailscale"
-  sensitive   = true
-}
-variable "tailscale_key2" {
+variable "tailscale_key" {
   description = "Auth key do Tailscale"
   sensitive   = true
 }
@@ -30,10 +26,6 @@ variable "vcn_dns_label" {
   description = "DNS label da VCN"
   default     = "vcndns"
 }
-variable "vm-00_name" {
-  description = "Nome da vm-00"
-  default     = "vm-00"
-}
 variable "vm-01_name" {
   description = "Nome da vm-01"
   default     = "vm-01"
@@ -42,18 +34,21 @@ variable "timezone" {
   description = "Fuso Horário"
   default = "Etc/UTC"
 }
-variable "webdav_username" {
-  description = "Usuario servidor WebDav"
-  default = "username"
+
+variable "gitlab_hostname" {
+  description = "Hostname do GitLab"
+  default     = "gitlab"
   sensitive = true
 }
-variable "webdav_password" {
-  description = "Senha servidor WebDav"
-  default = "changeme"
+
+variable "gitlab_porta_ssh" {
+  description = "Porta SSH do GitLab"
+  default     = "2222"
   sensitive = true
 }
-variable "pg_pass" {
-  description = "Senha do PostgreSQL"
-  default = "changeme"
+
+variable "gitlab_home" {
+  description = "Diretório home do GitLab"
+  default     = "/home/gitlab"
   sensitive = true
 }

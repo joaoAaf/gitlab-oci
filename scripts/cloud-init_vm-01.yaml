@@ -5,9 +5,9 @@ groups:
   - docker
 users:
   - default
-  - name: dba
-    gecos: DBA
-    primary_group: dba
+  - name: gitlab
+    gecos: GitLab
+    primary_group: gitlab
     groups: docker, users, admin
     sudo: 'ALL=(ALL) NOPASSWD:ALL'
     shell: /bin/bash
@@ -23,30 +23,17 @@ write_files:
   - content: |
       ${docker_compose_content}
     encoding: base64
-    path: /home/dba/docker-compose.yml
-    owner: dba:dba
+    path: /home/gitlab/docker-compose.yml
+    owner: gitlab:gitlab
     permissions: '0660'
-    defer: true
-  - content: |
-      #!/bin/bash
-      pg_dumpall -c -U postgres | gzip -9 > /pgbackup/dump_$(date +%Y-%m-%d"_"%H_%M_%S).sql.gz
-    path: /home/dba/pgbackup.sh
-    permissions: '0670'
-    defer: true
-  - content: |
-      0 0 * * * dba sh -c "docker exec postgresql pgbackup.sh"
-    path: /etc/cron.d/pgbackup
     defer: true
 runcmd:
   - curl -fsSL https://get.docker.com | sh
   - curl -fsSL https://tailscale.com/install.sh | sh
   - tailscale up --authkey ${tailscale_key}
-  - export PUID=$(id -u dba)
-  - export PGID=$(id -g dba)
-  - export TZ=${timezone}
-  - export WEBDAV_USERNAME=${webdav_username}
-  - export WEBDAV_PASSWORD=${webdav_password}
-  - export PG_PASS=${pg_pass}
-  - groupadd -g 999 postgres
-  - chown dba:postgres /home/dba/pgbackup.sh
-  - docker compose -f /home/dba/docker-compose.yml up -d
+  - export GITLAB_HOSTNAME=${gitlab_hostname}
+  - export GITLAB_PORTA_SSH=${gitlab_porta_ssh}
+  - export GITLAB_HOME=${gitlab_home}
+  - mkdir -p ${gitlab_home}/config ${gitlab_home}/logs ${gitlab_home}/data ${gitlab_home}/runner/config
+  - chown -R gitlab:gitlab ${gitlab_home}
+  - docker compose -f /home/gitlab/docker-compose.yml up -d
